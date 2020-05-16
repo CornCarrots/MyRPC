@@ -1,4 +1,4 @@
-package netty;
+package netty.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -12,7 +12,7 @@ import io.netty.util.CharsetUtil;
  * @author linhao
  * @date 2020/5/13 22:58
  */
-public class MyClientHandler extends SimpleChannelInboundHandler<HttpObject> {
+public class HttpHandler extends SimpleChannelInboundHandler<HttpObject> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, HttpObject httpObject) throws Exception {
         // 获取通道
