@@ -1,8 +1,6 @@
 package IM.server;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.*;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
@@ -39,6 +37,7 @@ public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
      * @param channel
      */
     private void dead(Channel channel){
-        channel.close();
+        ChannelFuture channelFuture = channel.writeAndFlush("掉线了...");
+        channelFuture.addListener((ChannelFutureListener) channelFuture1 -> channel.close());
     }
 }

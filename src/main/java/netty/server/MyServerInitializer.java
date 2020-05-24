@@ -6,6 +6,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import netty.coder.RequestDecoder;
+import netty.coder.ResponseEncoder;
 
 /**
  * @author linhao
@@ -20,11 +22,14 @@ public class MyServerInitializer extends ChannelInitializer<SocketChannel> {
         // 拦截器
         // 编码解码
 //        pipeline.addLast("HttpServerCodec", new HttpServerCodec());
-        pipeline.addLast(new StringDecoder());
-        pipeline.addLast(new StringEncoder());
+//        pipeline.addLast(new StringDecoder());
+        pipeline.addLast(new RequestDecoder());
+        pipeline.addLast(new ResponseEncoder());
+//        pipeline.addLast(new StringEncoder());
 
         // 返回
 //        pipeline.addLast("MyClientHandler", new MyClientHandler());
-        pipeline.addLast(new StringHandler());
+//        pipeline.addLast(new StringHandler());
+        pipeline.addLast(new RequestHandler());
     }
 }

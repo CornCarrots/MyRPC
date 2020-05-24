@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.util.HashedWheelTimer;
 
 /**
  * @author linhao
@@ -28,6 +29,7 @@ public class MyServerInitializer extends ChannelInitializer<SocketChannel> {
         // 聚合数据
         pipeline.addLast(new HttpObjectAggregator(1024 * 64));
         //-------------------------心跳------------------------
+//        HashedWheelTimer timer = new HashedWheelTimer();
         pipeline.addLast(new IdleStateHandler(8, 10, 12));
         pipeline.addLast(new HeartBeatHandler());
         //-------------------------IM------------------------

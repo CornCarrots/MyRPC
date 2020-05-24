@@ -33,7 +33,12 @@
             <artifactId>hutool-all</artifactId>
             <version>5.2.3</version>
         </dependency>
-
+        <!--自定义序列化器-->
+        <dependency>
+            <groupId>com.zerocoder.demo</groupId>
+            <artifactId>MySerializer</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -9,6 +9,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import netty.bean.module.testModule.request.OperationOneRequest;
+import netty.coder.MyRequest;
+import serializer.NettySerializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -34,8 +37,27 @@ public class MyClient {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             while (true){
                 System.out.println("请输入");
-                String msg = bufferedReader.readLine();
-                channelFuture.channel().writeAndFlush(msg);
+//                String msg = bufferedReader.readLine();
+//                channelFuture.channel().writeAndFlush(msg);
+
+                // 自定义请求实体
+                int id = Integer.parseInt(bufferedReader.readLine());
+                String name = bufferedReader.readLine();
+                OperationOneRequest operationOneRequest = new OperationOneRequest();
+                operationOneRequest.setId(id);
+                operationOneRequest.setName(name);
+                // 序列化实体
+                NettySerializer nettySerializer = new NettySerializer();
+                byte[] operationData = nettySerializer.serialize(operationOneRequest);
+
+                // 自定义请求协议
+                MyRequest request = new MyRequest();
+                request.setModule((short) 1);
+                request.setOperation((short) 1);
+                request.setData(operationData);
+
+                // 发送请求
+                channelFuture.channel().writeAndFlush(request);
             }
         } finally {
             subGroup.shutdownGracefully();

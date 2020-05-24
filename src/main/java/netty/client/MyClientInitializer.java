@@ -8,6 +8,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import netty.coder.RequestEncoder;
+import netty.coder.ResponseDecoder;
 
 /**
  * @author linhao
@@ -21,8 +23,11 @@ public class MyClientInitializer extends ChannelInitializer<NioSocketChannel> {
         ChannelPipeline pipeline = nioSocketChannel.pipeline();
         // 拦截器
         // 编码解码
-        pipeline.addLast(new StringDecoder());
-        pipeline.addLast(new StringEncoder());
-        pipeline.addLast(new StringHandler());
+//        pipeline.addLast(new StringDecoder());
+        pipeline.addLast(new ResponseDecoder());
+//        pipeline.addLast(new StringEncoder());
+        pipeline.addLast(new RequestEncoder());
+//        pipeline.addLast(new StringHandler());
+        pipeline.addLast(new ResponseHandler());
     }
 }
