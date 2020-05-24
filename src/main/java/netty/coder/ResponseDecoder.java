@@ -15,15 +15,21 @@ public class ResponseDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
+
+        int readableBytes = byteBuf.readableBytes();
         // 读数据包
-        if (byteBuf.readableBytes() < CoderConst.BASE_LENGTH) {
+        if (readableBytes < CoderConst.BASE_LENGTH) {
             return;
+        }
+        if (readableBytes > 2048){
+            byteBuf.skipBytes(readableBytes);
         }
         byteBuf.markReaderIndex();
         // 包头
         int packageLen = byteBuf.readInt();
         if (packageLen < CoderConst.PACKAGE_HEAD) {
             byteBuf.resetReaderIndex();
+            byteBuf.readByte();
             return;
         }
         // 模块

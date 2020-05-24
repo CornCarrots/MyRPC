@@ -15,5 +15,8 @@ public class CoderConst {
      * 基本数据包大小
      */
     public static final int BASE_LENGTH = 4 + 2 + 2 + 4;
-
+    /**
+     * 数据包限制
+     */
+    public static final int MAX_LENGTH = 2048;
 }

@@ -1,6 +1,7 @@
 package netty.client;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ArrayUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -15,6 +16,7 @@ import serializer.NettySerializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 /**
  * @author linhao
@@ -57,6 +59,7 @@ public class MyClient {
                 request.setData(operationData);
 
                 // 发送请求
+//                channelFuture.channel().writeAndFlush("12412" + request + "234");
                 channelFuture.channel().writeAndFlush(request);
             }
         } finally {
