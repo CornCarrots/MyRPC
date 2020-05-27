@@ -12,6 +12,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import netty.bean.module.testModule.request.OperationOneRequest;
 import netty.coder.MyRequest;
+import netty.util.InvokeUtil;
 import serializer.NettySerializer;
 
 import java.io.BufferedReader;
@@ -23,22 +24,30 @@ import java.util.Arrays;
  * @date 2020/5/13 18:00
  */
 public class MyClient {
-    public static void main(String[] args) throws Exception {
+    private static EventLoopGroup subGroup;
+    private static ChannelFuture channelFuture;
+
+    public static void initClient() {
         // 线程池
         // 从线程
-        EventLoopGroup subGroup = new NioEventLoopGroup();
-        try {
-            // 客户端 设置线程、通道、处理器
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(subGroup)
-                    .channel(NioSocketChannel.class)
-                    .handler(new MyClientInitializer());
+        subGroup = new NioEventLoopGroup();
+        // 客户端 设置线程、通道、处理器
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(subGroup)
+                .channel(NioSocketChannel.class)
+                .handler(new MyClientInitializer());
 
-            // 连接
-            ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8088);
+        // 连接
+        channelFuture = bootstrap.connect("127.0.0.1", 8088);
+    }
+
+    public static void main(String[] args) throws Exception {
+        try {
+            InvokeUtil.initService();
+            initClient();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            while (true){
-                System.out.println("请输入");
+            System.out.println("connect...");
+            while (true) {
 //                String msg = bufferedReader.readLine();
 //                channelFuture.channel().writeAndFlush(msg);
 
@@ -48,18 +57,10 @@ public class MyClient {
                 OperationOneRequest operationOneRequest = new OperationOneRequest();
                 operationOneRequest.setId(id);
                 operationOneRequest.setName(name);
-                // 序列化实体
-                NettySerializer nettySerializer = new NettySerializer();
-                byte[] operationData = nettySerializer.serialize(operationOneRequest);
 
                 // 自定义请求协议
-                MyRequest request = new MyRequest();
-                request.setModule((short) 1);
-                request.setOperation((short) 1);
-                request.setData(operationData);
-
+                MyRequest request = InvokeUtil.createReq((short) 1, (short) 1, operationOneRequest);
                 // 发送请求
-//                channelFuture.channel().writeAndFlush("12412" + request + "234");
                 channelFuture.channel().writeAndFlush(request);
             }
         } finally {

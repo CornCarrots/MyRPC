@@ -5,7 +5,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import netty.bean.module.testModule.response.OperationTwoResponse;
 import netty.coder.MyResponse;
 import netty.coder.StateEnum;
+import netty.util.InvokeUtil;
 import serializer.NettySerializer;
+
+import java.util.List;
 
 /**
  * @author linhao
@@ -21,18 +24,20 @@ public class ResponseHandler extends SimpleChannelInboundHandler<MyResponse> {
                 System.out.println("服务端异常");
                 return;
             }else if (myResponse.getState() == StateEnum.SUCCESS){
-                if (myResponse.getModule() == 1){
+                Object obj = InvokeUtil.invoke(myResponse.getModule(), myResponse.getOperation(), myResponse.getData());
 
-                    // 反序列化响应实体
-                    byte[] data = myResponse.getData();
-                    NettySerializer serializer = new NettySerializer();
-
-                    OperationTwoResponse operationTwoResponse = serializer.deserialize(data, OperationTwoResponse.class);
-                    System.out.println("id:" + operationTwoResponse.getId());
-                    System.out.println("money:" + operationTwoResponse.getMoney());
-                }else if (myResponse.getModule() == 2){
-
-                }
+//                if (myResponse.getModule() == 1){
+//
+//                    // 反序列化响应实体
+//                    byte[] data = myResponse.getData();
+//                    NettySerializer serializer = new NettySerializer();
+//
+//                    OperationTwoResponse operationTwoResponse = serializer.deserialize(data, OperationTwoResponse.class);
+//                    System.out.println("id:" + operationTwoResponse.getId());
+//                    System.out.println("money:" + operationTwoResponse.getMoney());
+//                }else if (myResponse.getModule() == 2){
+//
+//                }
             }
         }catch (Exception e){
             e.printStackTrace();

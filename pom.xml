@@ -37,7 +37,18 @@
         <dependency>
             <groupId>com.zerocoder.demo</groupId>
             <artifactId>MySerializer</artifactId>
-            <version>1.0</version>
+            <version>2.0</version>
+        </dependency>
+        <!--反射工具-->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>21.0</version>
         </dependency>
     </dependencies>
 

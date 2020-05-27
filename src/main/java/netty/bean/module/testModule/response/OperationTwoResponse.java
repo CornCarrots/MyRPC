@@ -32,4 +32,12 @@ public class OperationTwoResponse {
     public void setMoney(double money) {
         this.money = money;
     }
+
+    @Override
+    public String toString() {
+        return "OperationTwoResponse{" +
+                "id=" + id +
+                ", money=" + money +
+                '}';
+    }
 }

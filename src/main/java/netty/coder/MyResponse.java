@@ -26,6 +26,14 @@ public class MyResponse {
      */
     private byte[] data;
 
+    public MyResponse() {
+    }
+
+    public MyResponse(MyRequest request) {
+        module = request.getModule();
+        operation = request.getOperation();
+    }
+
     public short getModule() {
         return module;
     }

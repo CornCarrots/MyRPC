@@ -32,4 +32,12 @@ public class OperationOneRequest {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "OperationOneRequest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
