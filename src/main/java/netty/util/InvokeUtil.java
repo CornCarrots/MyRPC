@@ -26,22 +26,7 @@ public class InvokeUtil {
     private static Map<Short, Class> modules = new HashMap<>(16);
     private static NettySerializer serializer = new NettySerializer();
 
-    public static void initService(){
-        Reflections reflections = new Reflections("netty.handler.*"); //比如可以获取有Pay注解的class
-        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(SocketModule.class);
-        for (Class<?> clazz : classes) {
-            SocketModule socketModule = clazz.getAnnotation(SocketModule.class);
-            short mid = socketModule.moduleId();
-            modules.put(mid, clazz);
-            Set<Method> methods = ReflectionUtils.getMethods(clazz, ReflectionUtils.withAnnotation(SocketOperation.class));
-            for (Method method: methods) {
-                SocketOperation socketOperation = method.getAnnotation(SocketOperation.class);
-                short oid = socketOperation.operationId();
-                Map<Short, Method> operation = operations.computeIfAbsent(mid, k -> new HashMap<>());
-                operation.put(oid, method);
-            }
-        }
-    }
+
 
     public static MyRequest createReq(short mid, short oid, Object...param) throws Exception {
         // 序列化实体

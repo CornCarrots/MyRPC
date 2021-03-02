@@ -1,36 +1,24 @@
 package netty.server;
 
-import cn.hutool.core.io.resource.ResourceUtil;
-import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.log.LogFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import netty.annotation.SocketModule;
-import netty.annotation.SocketOperation;
-import netty.util.InvokeUtil;
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
-
-import java.lang.reflect.Method;
-import java.util.*;
-
-import static netty.util.InvokeUtil.initService;
+import netty.initializer.RegisterInitializer;
 
 /**
  * @author linhao
- * @date 2020/5/13 18:00
+ * 注册中心
+ * @date 2021/03/02
  */
-public class MyServer {
+public class RegisterCenter {
 
-    public static void main(String[] args) throws Exception {
-        InvokeUtil.initService();
-        initServer();
-    }
+    private static final int port = 8081;
 
-    private static void initServer(){
+    public static void initRegister(){
         // 线程池
         // 主线程
         EventLoopGroup mainGroup = new NioEventLoopGroup();
@@ -40,17 +28,21 @@ public class MyServer {
             // 服务器 设置线程、通道、处理器
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(mainGroup, subGroup)
+                    // 主线程最大连接数
                     .option(ChannelOption.SO_BACKLOG, 2048)
+                    // 子线程长连接 即时响应
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     .childOption(ChannelOption.TCP_NODELAY, true)
+                    // 管道执行 keys 轮询
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new MyServerInitializer());
+                    .childHandler(new RegisterInitializer());
 
-            System.out.println("start...");
+            System.out.println("start register...");
             // 同步启动 监听
-//            ChannelFuture channelFuture = bootstrap.bind(8088).sync();
-            ChannelFuture channelFuture = bootstrap.bind(8088);
-            // 同步关闭
+            ChannelFuture channelFuture = bootstrap.bind(port).sync();
+//            ChannelFuture channelFuture = bootstrap.bind(port);
+            LogFactory.get().info("start register success! listen port:{}", port);
+            // 回调
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -58,5 +50,9 @@ public class MyServer {
             mainGroup.shutdownGracefully();
             subGroup.shutdownGracefully();
         }
+    }
+
+    public static void main(String[] args) {
+        RegisterCenter.initRegister();
     }
 }

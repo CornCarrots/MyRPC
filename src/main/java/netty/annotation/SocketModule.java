@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface SocketModule {
-    short moduleId();
+    short moduleId() default 0;
 }

@@ -1,5 +1,6 @@
 package netty.coder;
 
+import cn.hutool.core.util.ArrayUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -20,6 +21,8 @@ public class RequestEncoder extends MessageToByteEncoder {
         byteBuf.writeShort(myRequest.getModule());
         byteBuf.writeShort(myRequest.getOperation());
         byteBuf.writeInt(myRequest.getDataLength());
-        byteBuf.writeBytes(myRequest.getData());
+        if (myRequest.getDataLength() > 0) {
+            byteBuf.writeBytes(myRequest.getData());
+        }
     }
 }

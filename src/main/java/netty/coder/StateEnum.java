@@ -9,7 +9,8 @@ package netty.coder;
  */
 public enum StateEnum {
     SUCCESS(1),
-    FAIL(0);
+    FAIL(0),
+    NOTFOUND(2);
 
     int code;
     StateEnum(int code){

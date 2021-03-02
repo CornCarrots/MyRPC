@@ -1,21 +1,28 @@
-package netty.client;
+package netty.initializer;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.http.HttpServerCodec;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
+import lombok.Data;
+import netty.client.ClientProxyHandler;
 import netty.coder.RequestEncoder;
 import netty.coder.ResponseDecoder;
+import netty.handler.RpcClientHandler;
 
 /**
  * @author linhao
+ * 调用端
  * @date 2020/5/13 22:51
  */
-public class MyClientInitializer extends ChannelInitializer<NioSocketChannel> {
+public class RpcClientInitializer extends ChannelInitializer<NioSocketChannel> {
+
+    RpcClientHandler rpcClientHandler;
+
+    public RpcClientInitializer(ClientProxyHandler handler) {
+        rpcClientHandler = new RpcClientHandler();
+        handler.setAdapter(rpcClientHandler);
+    }
 
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
@@ -23,11 +30,9 @@ public class MyClientInitializer extends ChannelInitializer<NioSocketChannel> {
         ChannelPipeline pipeline = nioSocketChannel.pipeline();
         // 拦截器
         // 编码解码
-//        pipeline.addLast(new StringDecoder());
         pipeline.addLast(new ResponseDecoder());
-//        pipeline.addLast(new StringEncoder());
         pipeline.addLast(new RequestEncoder());
-//        pipeline.addLast(new StringHandler());
-        pipeline.addLast(new ResponseHandler());
+        // 处理
+        pipeline.addLast(rpcClientHandler);
     }
 }

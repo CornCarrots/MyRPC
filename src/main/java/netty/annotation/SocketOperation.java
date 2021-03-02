@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface SocketOperation {
-    short operationId();
+    short operationId() default 0;
 }

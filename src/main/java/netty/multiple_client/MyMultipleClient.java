@@ -6,11 +6,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import netty.client.MyClientInitializer;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,8 +41,8 @@ public class MyMultipleClient {
         EventLoopGroup subGroup = new NioEventLoopGroup();
         // 客户端 设置线程、通道、处理器
         bootstrap.group(subGroup)
-                .channel(NioSocketChannel.class)
-                .handler(new MyClientInitializer());
+                .channel(NioSocketChannel.class);
+//                .handler(new MyClientInitializer());
         // 多连接
         for (int i = 0; i < count; i++) {
             ChannelFuture channelFuture = bootstrap.connect("127.0.0.1", 8088);

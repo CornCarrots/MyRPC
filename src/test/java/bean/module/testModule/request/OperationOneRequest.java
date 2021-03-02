@@ -1,4 +1,4 @@
-package netty.bean.module.testModule.request;
+package bean.module.testModule.request;
 
 import annotation.MySerializable;
 import annotation.MySerialize;
