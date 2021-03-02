@@ -1,7 +1,7 @@
 package service.impl;
 
-import netty.annotation.SocketModuleImpl;
-import netty.annotation.SocketOperation;
+import annotation.SocketModuleImpl;
+import annotation.SocketOperation;
 import service.HelloService;
 
 /**

@@ -1,6 +1,5 @@
-import netty.client.RpcProxy;
-import netty.server.RegisterCenter;
-import org.junit.BeforeClass;
+import client.RpcProxy;
+import server.RegisterCenter;
 import org.junit.Test;
 import service.HelloService;
 

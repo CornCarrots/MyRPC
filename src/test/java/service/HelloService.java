@@ -1,7 +1,7 @@
 package service;
 
-import netty.annotation.SocketModule;
-import netty.annotation.SocketOperation;
+import annotation.SocketModule;
+import annotation.SocketOperation;
 
 /**
  * @Author: zerocoder
