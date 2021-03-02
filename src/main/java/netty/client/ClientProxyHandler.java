@@ -41,14 +41,7 @@ public class ClientProxyHandler implements InvocationHandler {
 
     private final static int port = 8081;
 
-    // 注册容器
-    private static Map<String, Object> context;
-
-    private static Map<Short, String> moduleClassMap;
-
     private static Map<String, Short> classModuleMap;
-
-    private static Map<Short, Map<Short, Method>> operationMethodMap;
 
     private static Map<Short, Map<String, Short>> methodOptionMap;
 
@@ -56,10 +49,7 @@ public class ClientProxyHandler implements InvocationHandler {
 
     static {
         serializer = new NettySerializer();
-        context = new ConcurrentHashMap<>();
-        moduleClassMap = new ConcurrentHashMap<>();
         classModuleMap = new ConcurrentHashMap<>();
-        operationMethodMap = new ConcurrentHashMap<>();
         methodOptionMap = new ConcurrentHashMap<>();
         scanModuleAndOperation();
     }
@@ -110,7 +100,7 @@ public class ClientProxyHandler implements InvocationHandler {
 
     private void initRequest(Method method, Object[] args) throws Exception {
         request = new MyRequest();
-        Short mid = classModuleMap.get(this.clazz.getName());
+        Short mid = classModuleMap.get(clazz.getName());
         request.setModule(mid); // 类名称
         Map<String, Short> moduleMap = methodOptionMap.get(mid);
         Short oid = moduleMap.get(method.getName());
@@ -146,9 +136,6 @@ public class ClientProxyHandler implements InvocationHandler {
             if (annotation == null){
                 continue;
             }
-//            SocketModule socketModule = clazz.getAnnotation(SocketModule.class);
-//            short mid = socketModule.moduleId();
-            moduleClassMap.put(mid, clazz.getName());
             classModuleMap.put(clazz.getName(), mid);
 
             Set<Method> methods = ReflectionUtils.getMethods(clazz, ReflectionUtils.withAnnotation(SocketOperation.class));
@@ -157,14 +144,6 @@ public class ClientProxyHandler implements InvocationHandler {
                 if (socketOperation == null){
                     continue;
                 }
-//                SocketOperation socketOperation = method.getAnnotation(SocketOperation.class);
-//                short oid = socketOperation.operationId();
-                Map<Short, Method> shortMethodMap = operationMethodMap.get(mid);
-                if (shortMethodMap == null){
-                    shortMethodMap = new HashMap<>();
-                }
-                shortMethodMap.put(oid, method);
-                operationMethodMap.put(mid, shortMethodMap);
                 Map<String, Short> stringShortMap = methodOptionMap.get(mid);
                 if (stringShortMap == null){
                     stringShortMap = new HashMap<>();
