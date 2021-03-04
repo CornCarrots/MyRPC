@@ -32,4 +32,4 @@
 - 操作号：访问的方式，映射为方法
 - 具体数据的大小和内容（需要序列化）
 
-![Uploading image.png…]()
+![Snipaste_2021-03-04_10-50-20](https://user-images.githubusercontent.com/37919277/109904022-93896500-7cd7-11eb-8cb2-922c092b77f6.png)
